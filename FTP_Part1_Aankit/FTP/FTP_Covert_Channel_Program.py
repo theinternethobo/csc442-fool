@@ -1,5 +1,5 @@
-import os
-import stat
+import os   #allows me to access os functions
+import stat #interprets from os library
 
 filePermissions = []
 
