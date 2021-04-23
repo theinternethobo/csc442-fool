@@ -32,14 +32,13 @@ g = 0
 for i in msg:
     c.send(i.encode())
     if(g != (len(covert)) and covert[g] == "1"):
-        sleep(.01)
+        sleep(.1)
 
     elif(g != (len(covert)) and covert[g] == "0"):
-        sleep(.02)
+        sleep(.025)
 
     if(g == (len(covert))):
         sleep (.03)
-        print(i)
 
     if(g != (len(covert))):
         g += 1
@@ -52,4 +51,5 @@ c.send("EOF".encode())#send EOF
 
 print ("Message sent")
 
+s.close()
 c.close()#closes second socket
