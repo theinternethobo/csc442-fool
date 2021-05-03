@@ -35,6 +35,8 @@ if (DEBUG):
 keyboard = Controller()
 i = 0
 
+sleep(5)
+
 for char in password:
     keyboard.press(char)
     sleep(keypress[i])
@@ -42,6 +44,9 @@ for char in password:
     if (i < len(keyinterval)):
         sleep(keyinterval[i])
         i = i + 1
+
+keyboard.press(Key.enter)
+keyboard.release(Key.enter)
 
 tcflush(stdout, TCIFLUSH)
 print()
