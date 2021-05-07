@@ -5,11 +5,11 @@
 from ftplib import FTP
 
 # FTP server details
-IP = "138.47.102.120"
+IP = "138.47.99.163"
 PORT = 21
-USER = "anonymous"
-PASSWORD = ""
-FOLDER = "/7/"
+USER = "disintuitive"
+PASSWORD = "disintuitiveda51e"
+FOLDER = "~/FILES"
 USE_PASSIVE = True # set to False if the connection times out
 
 # connect and login to the FTP server
@@ -22,6 +22,9 @@ ftp.set_pasv(USE_PASSIVE)
 ftp.cwd(FOLDER)
 files = []
 ftp.dir(files.append)
+
+for i in files:
+    ftp.mget[i]
 
 # exit the FTP server
 ftp.quit()
@@ -88,11 +91,11 @@ message = ''
 if FOLDER == '/7/':
         for f in files:
             try:
-                message += SevenBitMethod(f)
+                print(f)
             except(TypeError):
                 continue
         print(message)
 else:
         for f in files:
-            message += TenBitMethod(f)
+            print(f)
         binaryDecoder(message)        
