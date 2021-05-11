@@ -9,7 +9,7 @@
 ###############################################
 import sys
 
-KEY = 'keya'
+KEY = 'key'
 
 # xor function
 def xor_it(message, key):
