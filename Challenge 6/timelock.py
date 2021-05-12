@@ -13,7 +13,7 @@ from datetime import datetime
 import sys
 
 DEBUG = False
-DEBUG_TIME = True # use default time over system's current time
+DEBUG_TIME = False # use default time over system's current time
 TIME = "2017 04 26 15 14 30" # default time to use for debugging
 
 ## SUBROUTINES ##
@@ -91,6 +91,8 @@ def Extract_Con(str_hash):
             if str_hash[j] not in {'a','b','c','d','e','f'}:
                 Code = Code + str_hash[j]
             j = j - 1
+
+        Code = Code+str_hash[length-1]
 
         print(Code)
     except IndexError:

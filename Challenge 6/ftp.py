@@ -7,8 +7,8 @@ from ftplib import FTP
 # FTP server details
 IP = "138.47.99.163"
 PORT = 21
-USER = "disintuitive"
-PASSWORD = "disintuitiveda51e"
+USER = "salt"
+PASSWORD = "tlas"
 FOLDER = "~/FILES"
 USE_PASSIVE = True # set to False if the connection times out
 
