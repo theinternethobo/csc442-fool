@@ -5,10 +5,9 @@
 #
 # (The Fool - CYEN 301)
 # 5/6/2021
-# Steg
+# Steg (sentinel, bit extract, and byte extract bug fixed)
 ###############################################
 import sys
-import math
 import argparse
 
 # default values for offset and interval
@@ -16,7 +15,7 @@ OFFSET = 0
 INTERVAL = 1
 
 # sentinel: {0x00, 0xff, 0x00, 0x00, 0xff, 0x00}
-sentinel = [0x00, 0xff, 0x00, 0x00, 0xff, 0x00]
+sentinel = bytearray(b'\x00\xff\x00\x00\xff\x00')
 
 ## COMMANDLINE PARSING ##
 # source: https://docs.python.org/3/library/argparse.html
@@ -65,7 +64,12 @@ def byte_storage(offset, interval, wrapper_file, hidden_file, sentinel):
     # append the sentinel bytes to the wrapper file to indicate the end of the hidden file
     i = 0
     while i < len(sentinel):
+
+        # source for formatting the sentinel byte to keep leading zeroes:
+        # https://www.w3resource.com/python-exercises/python-basic-exercise-140.php
+        # this is used in later parts of the code below...
         wrapper_file[offset] = int(format(ord(chr(sentinel[i])), '08b'), 2)
+        
         offset += interval
         i += 1
 
@@ -82,6 +86,9 @@ def byte_extraction(offset, interval, wrapper_file, sentinel):
         hidden_file.append(wrapper_file[offset])
         offset += interval
 
+    # remove the sentinel bytes
+    hidden_file = hidden_file[0:-6]
+        
     return hidden_file
 
 # bit method storage
@@ -105,26 +112,35 @@ def bit_storage(offset, interval, wrapper_file, hidden_file, sentinel):
 
     return wrapper_file
 
-    return
-
 # bit method extraction
 def bit_extraction(offset, interval, wrapper_file, sentinel):
 
     # create an empty hidden file byte array
     hidden_file = bytearray()
 
-    # while the last 6 bytes of the hidden is not the whole sentinel byte array
+    # while the last 6 bytes of the hidden are not the whole sentinel byte array
     while((hidden_file[-6:] != sentinel) and (offset < len(wrapper_file))):
-        b = 0
+        b = 0b00000000
 
         for j in range(0, 8):
-            if offset >= len(wrapper_file):
-                break
-            b = (b & 0b01111111) << 1
-            b += (wrapper_file[offset] & 0b00000001)
-            offset += interval
+            b = b | (wrapper_file[offset] & 0b00000001)
 
+            if j < 7:
+                b = (b << 1) & (2**8 - 1)
+                offset += interval
+
+        # check for sentinel
+        if b == sentinel[0]:
+            a = offset + interval
+            z = a + interval*4
+            if (wrapper_file[a:z:interval] == sentinel[1:]):
+                break
+        
         hidden_file.append(b)
+        offset += interval
+
+    # remove the sentinel bytes
+    hidden_file = hidden_file[0:-6]
 
     return hidden_file
 
